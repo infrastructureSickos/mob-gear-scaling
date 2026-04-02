@@ -68,14 +68,15 @@ jobs:
 
           TAG="${GITHUB_REF_NAME}"
           JAR_FILE="build/libs/mob-gear-scaling-${MOD_VERSION}.jar"
+          MODRINTH_ID=$(grep '^modrinth_id=' gradle.properties | cut -d'=' -f2)
 
-          DATA=$(python3 -c "
-          import json
+          DATA=$(MODRINTH_ID="$MODRINTH_ID" python3 -c "
+          import json, os
           data = {
               'name': 'MobGearScaling ${TAG}',
               'version_number': '${TAG}',
               'version_type': 'release',
-              'project_id': 'mob-gear-scaling',
+              'project_id': os.environ['MODRINTH_ID'],
               'dependencies': [],
               'game_versions': ['1.20.1'],
               'loaders': ['forge'],
